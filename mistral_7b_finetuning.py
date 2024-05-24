@@ -18,12 +18,9 @@ with open("all_data.json") as f:
     hf_dataset.save_to_disk('dataset_logical_reasoning')
 
 # Set torch dtype and attention implementation
-if torch.cuda.get_device_capability()[0] >= 8:
-    torch_dtype = torch.bfloat16
-    attn_implementation = "flash_attention_2"
-else:
-    torch_dtype = torch.float16
-    attn_implementation = "eager"
+torch_dtype = torch.float16
+attn_implementation = "eager"
+
 
 # LoRA config based on QLoRA paper
 peft_config = LoraConfig(
