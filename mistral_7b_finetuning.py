@@ -32,16 +32,10 @@ peft_config = LoraConfig(
     target_modules=['o_proj', 'v_proj', 'gate_proj', 'k_proj', 'q_proj', 'down_proj', 'up_proj']
 )
 
-# BitsAndBytesConfig int-4 config
-bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch_dtype,
-    bnb_4bit_use_double_quant=True,
-)
+
 
 model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B-v0.3",
-                                             quantization_config=bnb_config,
+
                                              attn_implementation=attn_implementation
                                              )
 tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.3")
@@ -57,7 +51,6 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.add_eos_token = True
 
 # prepare model for training
-model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
 model = get_peft_model(model, peft_config)
 
 args = TrainingArguments(
@@ -71,8 +64,6 @@ args = TrainingArguments(
     max_grad_norm=0.3,
     warmup_ratio=0.06,
     lr_scheduler_type="cosine",
-    bf16=True,
-    tf32=True,
     logging_steps=2,
     logging_first_step=True,
     save_strategy="steps",
