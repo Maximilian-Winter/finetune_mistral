@@ -4,12 +4,11 @@ import os
 import pandas as pd
 import torch
 import wandb
-from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments
+from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 from datasets import load_dataset, Dataset
 from trl import SFTTrainer, DataCollatorForCompletionOnlyLM, setup_chat_format
-torch.backends.cuda.matmul.allow_tf32 = True
-torch.backends.cudnn.allow_tf32 = True
+
 
 with open("all_data.json") as f:
     dataset = json.load(f)
