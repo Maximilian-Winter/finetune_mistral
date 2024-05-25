@@ -91,7 +91,7 @@ response_template = "<|im_start|>assistant"
 collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
 
 trainer = SFTTrainer(
-    model,
+    model.to("cuda"),
     max_seq_length=4096,
     tokenizer=tokenizer,
     peft_config=peft_config,
